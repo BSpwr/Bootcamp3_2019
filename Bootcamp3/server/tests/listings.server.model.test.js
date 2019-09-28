@@ -11,21 +11,26 @@
 
   */
 
-var should = require('should'), 
-    mongoose = require('mongoose'), 
-    Listing = require('../models/listings.server.model'), 
-    config = require('../config/config');
+var should = require('should'),
+  mongoose = require('mongoose'),
+  Listing = require('../models/listings.server.model'),
+  config = require('../config/config');
 
 var listing, id, latitude, longitude;
 
-listing =  {
-  code: "LBWEST", 
-  name: "Library West", 
-  address: "1545 W University Ave, Gainesville, FL 32603, United States"
-}
+listing = {
+  code: 'LBWEST',
+  name: 'Library West',
+  address: '1545 W University Ave, Gainesville, FL 32603, United States',
+};
+
+var secondListing = {
+  code: 'MARSTN',
+  name: 'Marston Science Library',
+  address: '444 Newell Dr, Gainesville, FL 32611',
+};
 
 describe('Listing Schema Unit Tests', function() {
-
   before(function(done) {
     mongoose.connect(config.db.uri, { useNewUrlParser: true });
     mongoose.set('useCreateIndex', true);
@@ -40,47 +45,69 @@ describe('Listing Schema Unit Tests', function() {
      */
     this.timeout(10000);
 
-    it('saves properly when code and name provided', function(done){
+    it('saves Marston to the DB when all 3 fields provided', function(done) {
       new Listing({
-        name: listing.name, 
-        code: listing.code
-      }).save(function(err, listing){
+        name: secondListing.name,
+        code: secondListing.code,
+        address: secondListing.address,
+      }).save(function(err, listing) {
         should.not.exist(err);
         id = listing._id;
         done();
       });
     });
 
-    it('saves properly when all three properties provided', function(done){
-      new Listing(listing).save(function(err, listing){
+    it('saves properly when code and name provided', function(done) {
+      new Listing({
+        name: listing.name,
+        code: listing.code,
+      }).save(function(err, listing) {
         should.not.exist(err);
         id = listing._id;
         done();
       });
     });
 
-    it('throws an error when name not provided', function(done){
+    it('saves properly when code and name provided', function(done) {
       new Listing({
-        code: listing.code
-      }).save(function(err){
-        should.exist(err);
+        name: listing.name,
+        code: listing.code,
+      }).save(function(err, listing) {
+        should.not.exist(err);
+        id = listing._id;
         done();
-      })
+      });
     });
 
-    it('throws an error when code not provided', function(done){
-      new Listing({
-        name: listing.name
-      }).save(function(err){
-        should.exist(err);
+    it('saves properly when all three properties provided', function(done) {
+      new Listing(listing).save(function(err, listing) {
+        should.not.exist(err);
+        id = listing._id;
         done();
-      })
+      });
     });
 
+    it('throws an error when name not provided', function(done) {
+      new Listing({
+        code: listing.code,
+      }).save(function(err) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('throws an error when code not provided', function(done) {
+      new Listing({
+        name: listing.name,
+      }).save(function(err) {
+        should.exist(err);
+        done();
+      });
+    });
   });
 
   afterEach(function(done) {
-    if(id) {
+    if (id) {
       Listing.deleteOne({ _id: id }).exec(function() {
         id = null;
         done();

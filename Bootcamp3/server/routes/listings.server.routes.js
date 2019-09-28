@@ -5,10 +5,10 @@
 */
 
 /* Dependencies */
-var listings = require('../controllers/listings.server.controller.js'), 
-    getCoordinates = require('../controllers/coordinates.server.controller.js'),
-    express = require('express'), //refers to Express the middleware helper for Node.js
-    router = express.Router(); //refers to the Router() function in Express the middleware helper for Node.js
+var listings = require('../controllers/listings.server.controller.js'),
+  getCoordinates = require('../controllers/coordinates.server.controller.js'),
+  express = require('express'), //refers to Express the middleware helper for Node.js
+  router = express.Router(); //refers to the Router() function in Express the middleware helper for Node.js
 
 /* 
   These method calls are responsible for routing requests to the correct request handler.
@@ -16,14 +16,16 @@ var listings = require('../controllers/listings.server.controller.js'),
  
   Note: the listings variable above and the file it is connected to help you trace
  */
-router.route('/')
+router
+  .route('/')
   .get(listings.list)
   .post(getCoordinates, listings.create);
 
 /*
   The ':' specifies a URL parameter. 
  */
-router.route('/:listingId')
+router
+  .route('/:listingId')
   .get(listings.read)
   .put(getCoordinates, listings.update)
   .delete(listings.delete);
