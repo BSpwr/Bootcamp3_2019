@@ -32,7 +32,7 @@ async function dbPopulate() {
   // Begin repopulating DB
   let parsedJson = undefined;
   try {
-    let readFile = await asyncFileRead('listings.json', 'utf8');
+    let readFile = await asyncFileRead('./public/listings.json', 'utf8');
     parsedJson = JSON.parse(readFile);
   } catch (err) {
     let errStr = `[JSON Read/Parse]: ${err}`;

@@ -26,7 +26,7 @@ module.exports.init = function() {
   app.use('/', express.static(__dirname + '/../../client'));
 
   // serve static files in public folder if user makes request to '/'
-  app.use('/', express.static(path.join(__dirname, 'public')));
+  app.use('/', express.static(path.join(__dirname, '../../public')));
 
   /* The next three middleware are important to the API that we are bulding */
 
